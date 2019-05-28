@@ -1,0 +1,447 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Verkt&oslash;ykassen - LED - Strips and diodes</title>
+    <link rel="stylesheet" href="/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700" rel="stylesheet">
+
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="Nanoc 4.1.5">
+  </head>
+  <body>
+    <div id="main">
+      
+<h1>LED - Strips and diodes</h1>
+
+<br><br>
+
+<h2>LED diodes</h2>
+
+<p>
+- To connect more LED diodes (not strips) than there is room for on an Arduino, you can use Arduino Mega or a shift register<br>
+<div id="image">
+<a href="../images/LED_IMG_1300.JPG"><img src="../images/LED_IMG_1300.JPG" width="300"></a>
+</div>
+</p>
+<br>
+
+<h2>LED strips</h2>
+
+<p>
+<a href="https://github.com/adafruit/Adafruit_NeoPixel">Neopixel Arduino library</a><br><br>
+- Look for addressable and/or Neopixel compatible LED-strip when buying to use with Arduino.<br>
+- LED strip requires external power adapter in Arduino<br>
+- Can also be used with <a href="https://www.pjrc.com/teensy/">Teensy</a><br>
+- <a href="http://fastled.io">FastLED</a> is an alternative library for Arduino and Teensy.<br>
+- LED-strips can be daisy chained by using connectors or soldering. They can also be cut by scissor and soldered together.<br>
+<div id="image">
+<a href="../images/LED_BIG_IMG_1299.JPG"><img src="../images/LED_IMG_1299.JPG" width="300"></a><br><br>
+</div>
+- The extra red and white cables on the LED-strip can be used for extra power.<br>
+- To use LED-strips with DMX and software like Madmapper, VDMX or Resolume Arena, you can use the <a href="https://art-net.org.uk">Art-net</a> protocol.<br>
+- Buy good quality LED-strips from <a href="https://gree-leds.com/smd5050-led-tape/96leds-rgbw-4in1-led-strip.html">China</a><br>
+</p>
+<br>
+
+<h2>LED strip and DMX</h2>
+<p>
+- <a href="https://playground.arduino.cc/DMX/DMXShield/">DMX shield</a><br>
+- <a href="https://sourceforge.net/projects/dmxlibraryforar/files/">DMX library for Arduino</a><br>
+- Remember to change number of channels: #define DMX_MASTER_CHANNELS  -> 4 <-<br>
+<div id="image">
+<a href="../images/LED_IMG_1294.JPG"><img src="../images/LED_IMG_1294.JPG" width="300"></a>
+<a href="../images/LED_IMG_1295.JPG"><img src="../images/LED_IMG_1295.JPG" width="300"></a>
+<a href="../images/LED_IMG_1296.JPG"><img src="../images/LED_IMG_1296.JPG" width="300"></a>
+<a href="../images/LED_IMG_1297.JPG"><img src="../images/LED_IMG_1297.JPG" width="300"></a>
+</div>
+</p>
+<br>
+
+<h2>Built-in LED</h2><br>
+<pre><code>
+void setup() {
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+// the loop function runs over and over again forever
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);                       // wait for a second
+  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);                       // wait for a second
+}
+</pre></code>
+<br><br>
+
+<h2>One LED diode</h2><br>
+<pre><code>
+int led = 3;
+int brightness = 255;
+
+void setup() {
+
+  pinMode( led, OUTPUT );
+
+}
+
+void loop() {
+
+  analogWrite( led, brightness );
+
+}
+</pre></code>
+<br><br>
+
+<h2>LED diode fading</h2><br>
+<pre><code>
+int led[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+int numOfLeds = 10;
+int brightness = 0;
+int fadeAmount = 1;
+
+void setup() {
+  
+  for ( int i = 0; i < numOfLeds; i++ ) {
+    pinMode( led[i], OUTPUT);
+  }
+  
+}
+
+
+void loop() {
+
+  for ( int i = 0; i < numOfLeds; i++ ) {
+    
+    analogWrite(led[i], brightness);
+    
+    brightness = brightness + fadeAmount;
+    
+    if (brightness <= 0 || brightness >= 255) {
+      fadeAmount = -fadeAmount;
+    }
+    
+  }
+
+  delay(50);
+
+
+}
+</pre></code>
+<br><br>
+
+<h2>Multiple LED diodes</h2><br>
+<pre><code>
+int led[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+int numOfLeds = 10;
+
+void setup() {
+  
+  for ( int i = 0; i < numOfLeds; i++ ) {
+    pinMode( led[i], OUTPUT);
+  }
+  
+}
+
+
+void loop() {
+
+  // Her slukkes alle lys
+  for ( int i = 0; i < numOfLeds; i++ ) {
+    digitalWrite( led[i], LOW );
+  }
+
+  
+
+  digitalWrite( led[0], LOW );
+  digitalWrite( led[1], LOW );
+  digitalWrite( led[2], LOW );
+  digitalWrite( led[3], LOW );
+  digitalWrite( led[4], LOW );
+  digitalWrite( led[5], LOW );
+  digitalWrite( led[6], LOW );
+  digitalWrite( led[7], LOW );
+  digitalWrite( led[8], LOW );
+  digitalWrite( led[9], LOW );
+
+  for ( int i = 0; i < numOfLeds; i++ ) {
+    digitalWrite( led[i], HIGH );
+    digitalWrite( led[i - 1], HIGH );
+    digitalWrite( led[i - 2], HIGH );
+    digitalWrite( led[i - 3], LOW );
+    delay( 500 );
+  }
+
+
+}
+</pre></code>
+<br><br>
+
+<h2>LED-strip and button</h2><br>
+<pre><code>
+#include "Adafruit_NeoPixel.h"
+#ifdef __AVR__
+ #include "avr/power.h"
+#endif
+
+const int buttonPin = 52;
+int buttonState = 0;
+const int ledPin =  13;
+const int numOfLeds = 60;
+const int ledStripPin = 51;
+
+Adafruit_NeoPixel pixels( numOfLeds, ledStripPin, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+
+#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+  clock_prescale_set(clock_div_1);
+#endif
+  
+  pixels.begin();
+  
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  
+}
+
+void loop() {
+
+  buttonState = digitalRead(buttonPin);
+
+  if ( buttonState == LOW ) {
+    
+    digitalWrite(ledPin, LOW);
+    
+    for ( int i = 0; i < numOfLeds; i++ ) {
+      pixels.setPixelColor( i, pixels.Color( 255, 0, 0 ) );
+    }
+    
+    pixels.show();
+    
+  } else {
+    
+    for ( int i = 0; i < numOfLeds; i++ ) {
+      pixels.setPixelColor( i, pixels.Color( 0, 255, 0 ) );
+    }
+    
+    pixels.show();
+    
+    digitalWrite(ledPin, HIGH);
+    
+  }
+  
+}
+</pre></code>
+<br><br>
+
+<h2>LED-strip DMX master</h2><br>
+<pre><code>
+/*
+  DMX_Master.ino - Example code for using the Conceptinetics DMX library
+  Copyright (c) 2013 W.A. van der Meeren danny@illogic.nl.  All right reserved.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 3 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+
+#include "Conceptinetics.h"
+
+
+//
+// CTC-DRA-13-1 ISOLATED DMX-RDM SHIELD JUMPER INSTRUCTIONS
+//
+// If you are using the above mentioned shield you should 
+// place the RXEN jumper towards pin number 2, this allows the
+// master controller to put to iso shield into transmit 
+// (DMX Master) mode 
+//
+//
+// The !EN Jumper should be either placed in the G (GROUND) 
+// position to enable the shield circuitry 
+//   OR
+// if one of the pins is selected the selected pin should be
+// set to OUTPUT mode and set to LOGIC LOW in order for the 
+// shield to work
+//
+
+
+//
+// The master will control 100 Channels (1-100)
+// 
+// depending on the ammount of memory you have free you can choose
+// to enlarge or schrink the ammount of channels (minimum is 1)
+//
+#define DMX_MASTER_CHANNELS   4 
+
+//
+// Pin number to change read or write mode on the shield
+//
+#define RXEN_PIN                2
+
+
+// Configure a DMX master controller, the master controller
+// will use the RXEN_PIN to control its write operation 
+// on the bus
+DMX_Master        dmx_master ( DMX_MASTER_CHANNELS, RXEN_PIN );
+
+
+// the setup routine runs once when you press reset:
+void setup() {             
+  
+  // Enable DMX master interface and start transmitting
+  dmx_master.enable ();  
+  
+  // Set channel 1 - 50 @ 50%
+  dmx_master.setChannelRange ( 1, 25, 127 );
+}
+
+// the loop routine runs over and over again forever:
+void loop() 
+{
+  static int dimmer_val;
+  
+  // Keep fading channel 1 in from 0 to 100%
+  dmx_master.setChannelValue ( 1, 255 );
+  dmx_master.setChannelValue ( 2, 150 );
+  dmx_master.setChannelValue ( 3, 0 );
+  dmx_master.setChannelValue ( 4, 150 );  
+  
+  delay ( 100 );
+}
+</pre></code>
+<br><br>
+
+<h2>LED-strip fade</h2><br>
+<pre><code>
+#include "Adafruit_NeoPixel.h"
+#ifdef __AVR__
+ #include "avr/power.h"
+#endif
+
+const int numOfLeds = 60;
+const int ledStripPin = 51;
+float fadeAmount = 0.5;
+float brightness = 0;
+
+Adafruit_NeoPixel pixels( numOfLeds, ledStripPin, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+
+#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+  clock_prescale_set(clock_div_1);
+#endif
+  
+  pixels.begin();
+  
+}
+
+void loop() {
+
+  for ( int i = 0; i < numOfLeds; i++ ) {
+    pixels.setPixelColor( i, pixels.Color( 255, 255, 255 ) );
+  }
+
+  brightness = brightness + fadeAmount;
+  
+  if (brightness <= 0 || brightness >= 255) {
+    fadeAmount = -fadeAmount;
+  }
+  pixels.setBrightness( brightness );
+  
+  pixels.show();
+  
+}
+</pre></code>
+<br><br>
+
+
+<h2>LED-strip snake</h2><br>
+<pre><code>
+#include "Adafruit_NeoPixel.h"
+#ifdef __AVR__
+ #include "avr/power.h"
+#endif
+
+#define PIN 51
+
+#define NUMPIXELS 60
+
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+#define DELAYVAL 50 // Time (in milliseconds) to pause between pixels
+
+void setup() {
+
+#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+  clock_prescale_set(clock_div_1);
+#endif
+  
+
+  pixels.begin();
+
+  
+}
+
+void loop() {
+
+  pixels.clear();
+  
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+
+    pixels.setPixelColor( i, pixels.Color( 255, 255, 255 ) );
+    pixels.setPixelColor( i - 1, pixels.Color( 100, 100, 100 ) );
+    pixels.setPixelColor( i - 2, pixels.Color( 50, 50, 50 ) );
+    pixels.setPixelColor( i - 3, pixels.Color( 10, 10, 10 ) );
+    pixels.setPixelColor( i - 4, pixels.Color( 0, 0, 0 ) );
+
+    pixels.show();   // Send the updated pixel colors to the hardware.
+
+    delay( DELAYVAL ); // Pause before next pass through loop
+  }
+  
+}
+</pre></code>
+<br><br>
+    </div>
+    <div id="sidebar">
+      <a href="/">Home</a>
+      <br><br>
+      <h2>MICROBIT</h2>
+      <ul>
+        <li><a href="/microbit_overview">Overview</a></li>
+        <li><a href="/microbit_maintenance">Maintenance issue</a></li>
+        <li><a href="/microbit_outOfTheBox">Out of the box program</a></li>
+        <li><a href="/microbit_external_LED">External LED</a></li>
+        <li><a href="/microbit_lightLevel">Light level/sensor</a></li>
+        <li><a href="/microbit_edgeConnector">Edge connector</a></li>
+      </ul>
+      <h2>UNITY</h2>
+      <ul>
+        <li><a href="/unity">Roll a ball</a></li>
+      </ul>
+      <h2>Video syncronisation</h2>
+      <ul>
+        <li><a href="/VideoSync_Brightsign">Brightsign</a></li>
+        <li><a href="/VideoSync_Multiscreener">Multiscreener</a></li>
+      </ul>
+      <h2>LED</h2>
+      <ul>
+        <li><a href="/LED_strip_and_diodes">Strips and diodes</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

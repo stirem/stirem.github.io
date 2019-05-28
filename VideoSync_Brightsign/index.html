@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Verkt&oslash;ykassen - Video syncronisation</title>
+    <link rel="stylesheet" href="/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700" rel="stylesheet">
+
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="Nanoc 4.1.5">
+  </head>
+  <body>
+    <div id="main">
+      
+<h1>Video syncronisation - BrightSign</h1>
+
+<p>
+
+
+<a href="https://www.zachpoff.com/software/brightsign-video-sync-scripts/">Zach Poff</a>
+
+<br><br>
+
+<a href="https://en.wikipedia.org/wiki/Genlock">Genlock (generator locking)</a>
+
+<br><br>
+
+<a href="https://www.brightsign.biz/key-features/brightwall">BrightWall for genlock sync</a>
+
+<br><br>
+
+- 1-2 frames out of sync after 90 min. Sync on loop.<br>
+- DisplayPort issue. No DisplayPort output on BrightSign.<br>
+- MacBook Pro 13 inch early 2013 not supporting 3840x2160. 1920x1080 over HDMI. 2560x1440 over MiniDisplay port to DisplayPort.<br>
+- Video Codec: 4K video must be encoded as an H.265 (HEVC) file. Container Format: The following container formats are supported: .ts, .mov, .mp4, .mkv, .webm.<br>
+	- <a href="https://brightsign.zendesk.com/hc/en-us/articles/218065137-What-video-formats-and-codecs-do-BrightSign-players-support-">Supported formats</a><br>
+	- <a href="https://handbrake.fr">Handbrake</a> H.265 3840x2160 29.97fps HEVC works.<br>
+	- Important that the resolution settings on file is the same as the screen.<br>
+
+<br><br><br>
+1. Encode 4k video to HEVC h.265 with MPEG-4 container<br>
+2. Format SD-card using «SD-formatter»<br>
+3. Copy "autorun.brs" from MASTER folder and videofile to to master SD-card. Copy "autorun.brs" from CLIENT1 and videofile to client1 sd-card<br><br>
+
+
+</p>
+
+    </div>
+    <div id="sidebar">
+      <a href="/">Home</a>
+      <br><br>
+      <h2>MICROBIT</h2>
+      <ul>
+        <li><a href="/microbit_overview">Overview</a></li>
+        <li><a href="/microbit_maintenance">Maintenance issue</a></li>
+        <li><a href="/microbit_outOfTheBox">Out of the box program</a></li>
+        <li><a href="/microbit_external_LED">External LED</a></li>
+        <li><a href="/microbit_lightLevel">Light level/sensor</a></li>
+        <li><a href="/microbit_edgeConnector">Edge connector</a></li>
+      </ul>
+      <h2>UNITY</h2>
+      <ul>
+        <li><a href="/unity">Roll a ball</a></li>
+      </ul>
+      <h2>Video syncronisation</h2>
+      <ul>
+        <li><a href="/VideoSync_Brightsign">Brightsign</a></li>
+        <li><a href="/VideoSync_Multiscreener">Multiscreener</a></li>
+      </ul>
+      <h2>LED</h2>
+      <ul>
+        <li><a href="/LED_strip_and_diodes">Strips and diodes</a></li>
+      </ul>
+    </div>
+  </body>
+</html>
