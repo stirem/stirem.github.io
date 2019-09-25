@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Verkt&oslash;ykassen - Arduino - introduction</title>
+    <link rel="stylesheet" href="/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700" rel="stylesheet">
+
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="Nanoc 4.1.5">
+  </head>
+  <body>
+    <div id="main">
+      
+<h1>Arduino - introduction</h1>
+
+<br><br>
+
+<div id="image">
+<a href="../images/arduino_uno.jpg"><img src="../images/arduino_uno.jpg" width="300"></a>
+</div>
+
+<p>
+	Arduino is a small circuit board that you can use to bring the physical world into the data world, and the data world into the physical world. For example, you can measure temperature, light, CO2, distance, movement or humidity, and connect buttons, switches or displays to control and display information, or motors to set something in motion. If you see an electronic installation, it is likely that Arduino is in use.
+</p>
+
+<br><br>
+
+<div id="image">
+<a href="../images/Arduino_illustration.jpg"><img src="../images/Arduino_illustration.jpg" width="500"></a>
+</div>
+
+<br><br>
+
+<h2>Blink built-in LED</h2>
+<br>
+<pre><code>
+void setup() {
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+// the loop function runs over and over again forever
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);                       // wait for a second
+  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);                       // wait for a second
+}
+</pre></code>
+
+<br><br>
+
+<h2>Fade LED</h2>
+<br>
+<div id="image">
+<a href="../images/Arduino_fade.png"><img src="../images/Arduino_fade.png" width="400"></a>
+</div>
+<br>
+<pre><code>
+int ledPin = 9;        // the PWM pin the LED is attached to
+int brightness = 0;    // how bright the LED is
+int fadeAmount = 10;   // how many points to fade the LED by
+
+// the setup routine runs once when you press reset:
+void setup() {
+  // declare pin 9 to be an output:
+  pinMode( ledPin, OUTPUT );
+
+  Serial.begin(9600);
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+  // set the brightness of pin 9:
+  analogWrite(ledPin, brightness);
+
+  // change the brightness for next time through the loop:
+  brightness = brightness + fadeAmount;
+  Serial.println( brightness );
+
+  // reverse the direction of the fading at the ends of the fade:
+  if (brightness <= 0 || brightness >= 255) {
+    fadeAmount = -fadeAmount;
+  }
+  // wait for 30 milliseconds to see the dimming effect
+  delay(30);
+}
+</pre></code>
+
+<br><br>
+
+<h2>Potentiometer</h2>
+<br>
+<div id="image">
+<a href="../images/Arduino_potentiometer.jpg"><img src="../images/Arduino_potentiometer.jpg" width="400"></a>
+</div>
+<br>
+<pre><code>
+int potPin = A2;    // select the ANALOG input pin for the potentiometer
+int value = 0;       // variable to store the value coming from the sensor
+
+void setup() {
+  Serial.begin( 9600 ); // Start Serial
+  pinMode( potPin, INPUT );  // declare the ledPin as an OUTPUT
+}
+
+void loop() {
+  value = analogRead( potPin );    // read the value from the sensor
+  Serial.println( value ); // Write to Serial
+}
+</pre></code>
+
+<br><br>
+
+<h2>Potentiometer controlling LED brightness</h2>
+<br>
+<pre><code>
+int potPin = A2;    // select the ANALOG input pin for the potentiometer
+int val = 0;       // variable to store the value coming from the sensor
+int ledPin = 9;
+int brightness = 255;
+
+void setup() {
+  Serial.begin( 9600 ); // Start Serial
+  pinMode( potPin, INPUT );  // declare the ledPin as an OUTPUT
+  pinMode( ledPin, OUTPUT );
+}
+
+void loop() {
+  val = analogRead( potPin );    // read the value from the sensor
+  Serial.print( "Potentiometer: " );
+  Serial.println( val ); // Write to Serial
+
+  brightness = map( val, 0, 1023, 0, 255 ); // Scale analog potentiometer values to LED values
+  Serial.print( "Brightness: " );
+  Serial.println( brightness );
+  analogWrite( ledPin, brightness );
+}
+</pre></code>
+
+
+
+    </div>
+    <div id="sidebar">
+      <a href="/">Home</a>
+      <br><br>
+      <h2>MICROBIT</h2>
+      <ul>
+        <li><a href="/microbit_overview">Overview</a></li>
+        <li><a href="/microbit_maintenance">Maintenance issue</a></li>
+        <li><a href="/microbit_outOfTheBox">Out of the box program</a></li>
+        <li><a href="/microbit_external_LED">External LED</a></li>
+        <li><a href="/microbit_lightLevel">Light level/sensor</a></li>
+        <li><a href="/microbit_edgeConnector">Edge connector</a></li>
+      </ul>
+      <h2>UNITY</h2>
+      <ul>
+        <li><a href="/unity">Roll a ball</a></li>
+      </ul>
+      <h2>VIDEO SYNCRONISATION</h2>
+      <ul>
+        <li><a href="/VideoSync_Brightsign">Brightsign</a></li>
+        <li><a href="/VideoSync_Multiscreener">Multiscreener</a></li>
+      </ul>
+      <h2>LED</h2>
+      <ul>
+        <li><a href="/LED_strip_and_diodes">Strips and diodes</a></li>
+      </ul>
+      <h2>CREATIVE SOFTWARE</h2>
+      <ul>
+        <li><a href="/CreativeSoftware_Overview">Software overview</a></li>
+      </ul>
+      <h2>ARDUINO</h2>
+      <ul>
+        <li><a href="/Arduino_intro">Introduction</a></li>
+      </ul>
+
+    </div>
+  </body>
+</html>
