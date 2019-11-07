@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Verkt&oslash;ykassen - Raspberry Pi - Video Player</title>
+    <link rel="stylesheet" href="/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700" rel="stylesheet">
+
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="Nanoc 4.1.5">
+  </head>
+  <body>
+    <div id="main">
+      
+<h1>Raspberry Pi - Video Player</h1>
+
+<br><br>
+
+<pre><code>
+1. Format SD card
+  
+  - Software: “SD Formatter”
+
+2. Download image
+  
+  - Raspbian buster lite
+
+3. Flash SD card with image
+
+  - Software: “Balena Etcher”
+
+4. Boot up Raspberry Pi
+
+  - Type:
+
+  $ sudo raspi-config
+  
+  Localisation options -> Change Keyboard Layout -> Generic 105-key PC ->
+Other -> Norwegian -> Norwegian (top) -> The default for the keyboard layout -> No compose key
+
+  Boot Options -> Desktop / CLI -> Consoe Autologin
+  
+  Interfacing Options -> SSH -> enable -> YES
+  - Finish -> Reboot -> YES
+
+5. Auto mount USB drive
+
+  - Insert USB drive
+
+  Type:
+
+  $ sudo blkid
+  
+  find name of drive e.g. "/dev/sda1"
+
+  - Connect to internet. (Share internet from Mac wifi to ethernet)
+
+  - SSH into pi
+
+  $ ifconfig
+
+  - find ip adress
+    - "eth0 inet"
+  - from Mac:
+    
+  $ ssh -l pi 192.168.2.36 <- switch ip adress with your pi's
+
+  - choose trust: "yes"
+  - if you get this: WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+    - open /Users/username/.ssh/known_hosts
+      - delete line with ip adress
+      - try again
+  - type password: raspberry
+
+  $ sudo nano /etc/fstab
+
+  Copy/paste this to bottom:
+
+  /dev/sda1 /home/pi/usbdrv vfat uid=pi,gid=pi,umask=0022,sync,auto,nosuid,rw,nouser 0 0
+
+  - "Ctrl-X" -> type "Y" to confirm exit and save
+  
+  - Reboot
+  
+  $ ls 
+  
+  $ cd usbdrv
+  
+  $ ls
+  
+  - Check if USB drive mounts to "/home/pi/usbdrv"
+
+6. Install omxplayer
+
+  $ sudo apt-get update
+  
+  $ sudo apt-get install omxplayer
+
+  - "Do you want to continue?"
+    - Type "Y"
+
+7. Looping script
+
+  $ cd /home/pi
+  
+  $ sudo nano loopingVideo.sh
+  
+  - Copy/pase this:
+
+  ------------------------------------------------------------------
+  #!/bin/sh
+  VIDEOPATH="/home/pi/usbdrv"
+  SERVICE="omxplayer"
+  while true; do
+    if ps ax | grep -v grep | grep $SERVICE > /dev/null
+    then
+    sleep 1;
+  else
+    for entry in $VIDEOPATH/*
+    do
+      clear
+      omxplayer -o both $entry > /dev/null
+    done
+  fi
+  done
+  ------------------------------------------------------------------
+
+  - "Ctrl-X" to save and exit
+  - Type big "Y" to confirm
+  
+  $ sudo chmod +x loopingVideo.sh
+
+8. Disable dhcp (internet)
+
+  - exit pi on console on Mac
+  
+  - unplugg network cable
+  
+  - From pi console:
+  
+  $ sudo update-rc.d dhcpcd disable
+  
+  $ sudo update-rc.d dhcpcd enable <- to enable again
+
+  
+9. Hide console and autorun script on startup boot
+
+  $ sudo nano /home/pi/.bashrc
+  
+  setterm -blank 0
+  setterm -cursor off
+  /home/pi/loopingVideo.sh
+
+
+
+
+
+
+
+Waiting for memory stick if it is not plugged in
+
+Playlist works
+
+Codec: Apple Prores, Intermediate codec fungerer ikke
+mov h264 fungerer
+
+No special characters like æøå and space in filename
+
+Omxplayer overruns hdmi/audio jack options in raspi-config (amixer)
+"-o both" in script directs audio to both
+
+Lightning means it is getting too little power -> use better power supply
+
+Using "/.bashrc" makes it possible to use the keyboard to exit script loop with "Ctrl-C". ".bashrc" runs after the user is logged in. 
+
+</pre></code>
+
+
+    </div>
+    <div id="sidebar">
+      <a href="/">Home</a>
+      <br><br>
+      <h2>MICROBIT</h2>
+      <ul>
+        <li><a href="/microbit_overview">Overview</a></li>
+        <li><a href="/microbit_maintenance">Maintenance issue</a></li>
+        <li><a href="/microbit_outOfTheBox">Out of the box program</a></li>
+        <li><a href="/microbit_external_LED">External LED</a></li>
+        <li><a href="/microbit_lightLevel">Light level/sensor</a></li>
+        <li><a href="/microbit_edgeConnector">Edge connector</a></li>
+      </ul>
+      <h2>UNITY</h2>
+      <ul>
+        <li><a href="/unity">Roll a ball</a></li>
+      </ul>
+      <h2>VIDEO SYNCRONISATION</h2>
+      <ul>
+        <li><a href="/VideoSync_Brightsign">Brightsign</a></li>
+        <li><a href="/VideoSync_Multiscreener">Multiscreener</a></li>
+      </ul>
+      <h2>LED</h2>
+      <ul>
+        <li><a href="/LED_strip_and_diodes">Strips and diodes</a></li>
+      </ul>
+      <h2>CREATIVE SOFTWARE</h2>
+      <ul>
+        <li><a href="/CreativeSoftware_Overview">Software overview</a></li>
+      </ul>
+      <h2>ARDUINO</h2>
+      <ul>
+        <li><a href="/Arduino_intro">Introduction</a></li>
+      </ul>
+      <h2>RASPBERRY PI</h2>
+      <ul>
+        <li><a href="/RaspberryPiVideoPlayer">Video Player</a></li>
+      </ul>
+
+    </div>
+  </body>
+</html>
