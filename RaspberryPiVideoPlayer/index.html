@@ -12,169 +12,320 @@
   <body>
     <div id="main">
       
-<h1>Raspberry Pi - Video Player</h1>
+<h1>How to make auto starting looping video player with video files on USB drive</h1>
 
 <br><br>
 
+<h2>1. Format SD card</h2>
+<p>Software: “<a href="https://www.sdcard.org/downloads/formatter/">SD Formatter</a>”</p>
+
+<h2>2. Download image</h2>
+<p><a href="https://www.raspberrypi.org/downloads/raspbian/">Raspbian lite</a></p>
+
+
+<h2>3. Flash SD card with "Raspbian lite" image</h2>
+
+<p>
+Use software: “<a href="https://www.balena.io/etcher/">Balena Etcher</a>” to flash SD card.
+</p>
+
+<h2>4. Boot up Raspberry Pi</h2>
+<p> 
+Login: pi<br>
+Password: raspberry<br>
+Then open Raspberry Pi config. "sudo" gives you root (administrator) rights:<br>
+</p>
+
 <pre><code>
-1. Format SD card
-  
-  - Software: “SD Formatter”
-
-2. Download image
-  
-  - Raspbian buster lite
-
-3. Flash SD card with image
-
-  - Software: “Balena Etcher”
-
-4. Boot up Raspberry Pi
-
-  - Type:
-
-  $ sudo raspi-config
-  
-  Localisation options -> Change Keyboard Layout -> Generic 105-key PC ->
-Other -> Norwegian -> Norwegian (top) -> The default for the keyboard layout -> No compose key
-
-  Boot Options -> Desktop / CLI -> Consoe Autologin
-  
-  Interfacing Options -> SSH -> enable -> YES
-  - Finish -> Reboot -> YES
-
-5. Auto mount USB drive
-
-  - Insert USB drive
-
-  Type:
-
-  $ sudo blkid
-  
-  find name of drive e.g. "/dev/sda1"
-
-  - Connect to internet. (Share internet from Mac wifi to ethernet)
-
-  - SSH into pi
-
-  $ ifconfig
-
-  - find ip adress
-    - "eth0 inet"
-  - from Mac:
-    
-  $ ssh -l pi 192.168.2.36 <- switch ip adress with your pi's
-
-  - choose trust: "yes"
-  - if you get this: WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
-    - open /Users/username/.ssh/known_hosts
-      - delete line with ip adress
-      - try again
-  - type password: raspberry
-
-  $ sudo nano /etc/fstab
-
-  Copy/paste this to bottom:
-
-  /dev/sda1 /home/pi/usbdrv vfat uid=pi,gid=pi,umask=0022,sync,auto,nosuid,rw,nouser 0 0
-
-  - "Ctrl-X" -> type "Y" to confirm exit and save
-  
-  - Reboot
-  
-  $ ls 
-  
-  $ cd usbdrv
-  
-  $ ls
-  
-  - Check if USB drive mounts to "/home/pi/usbdrv"
-
-6. Install omxplayer
-
-  $ sudo apt-get update
-  
-  $ sudo apt-get install omxplayer
-
-  - "Do you want to continue?"
-    - Type "Y"
-
-7. Looping script
-
-  $ cd /home/pi
-  
-  $ sudo nano loopingVideo.sh
-  
-  - Copy/pase this:
-
-  ------------------------------------------------------------------
-  #!/bin/sh
-  VIDEOPATH="/home/pi/usbdrv"
-  SERVICE="omxplayer"
-  while true; do
-    if ps ax | grep -v grep | grep $SERVICE > /dev/null
-    then
-    sleep 1;
-  else
-    for entry in $VIDEOPATH/*
-    do
-      clear
-      omxplayer -o both $entry > /dev/null
-    done
-  fi
-  done
-  ------------------------------------------------------------------
-
-  - "Ctrl-X" to save and exit
-  - Type big "Y" to confirm
-  
-  $ sudo chmod +x loopingVideo.sh
-
-8. Disable dhcp (internet)
-
-  - exit pi on console on Mac
-  
-  - unplugg network cable
-  
-  - From pi console:
-  
-  $ sudo update-rc.d dhcpcd disable
-  
-  $ sudo update-rc.d dhcpcd enable <- to enable again
-
-  
-9. Hide console and autorun script on startup boot
-
-  $ sudo nano /home/pi/.bashrc
-  
-  setterm -blank 0
-  setterm -cursor off
-  /home/pi/loopingVideo.sh
-
-
-
-
-
-
-
-Waiting for memory stick if it is not plugged in
-
-Playlist works
-
-Codec: Apple Prores, Intermediate codec fungerer ikke
-mov h264 fungerer
-
-No special characters like æøå and space in filename
-
-Omxplayer overruns hdmi/audio jack options in raspi-config (amixer)
-"-o both" in script directs audio to both
-
-Lightning means it is getting too little power -> use better power supply
-
-Using "/.bashrc" makes it possible to use the keyboard to exit script loop with "Ctrl-C". ".bashrc" runs after the user is logged in. 
-
+$ sudo raspi-config
 </pre></code>
 
+<p>
+Only if you have norwegian keyboard:<br>
+<b>Localisation options</b> -> Change Keyboard Layout -> Generic 105-key PC -> Other -> Norwegian -> Norwegian (top) -> The default for the keyboard layout -> No compose key<br><br>
+<b>Boot Options</b> -> Desktop / CLI -> Console Autologin<br><br>
+<b>Interfacing Options</b> -> SSH -> enable -> YES<br><br>
+<b>Advanced Options</b> -> Memory Split -> type: 256 -> OK -> Reboot -> YES<br>
+</p>
+
+<h2>5. Auto mount USB drive</h2>
+
+<p>	
+Insert USB drive then type:
+</p>
+
+<pre><code>
+$ sudo blkid
+</pre></code>
+
+<p>
+Find name of drive e.g. “/dev/sda1". I think the first drive connected is always “/dev/sda1” on Raspberry Pi. Then open "fstab" with the text editor "Nano":<br>
+</p>
+
+<pre><code>
+$ sudo nano /etc/fstab
+</pre></code>
+
+<p>
+Type this at the bottom. Make sure you type it exactly as here, or else the pi might not boot up and you will have to start over at point nr. 3:<br>
+</p>
+
+<pre><code>
+/dev/sda1 /home/pi/usbdrv vfat uid=pi,gid=pi,umask=0022,sync,auto,nosuid,rw,nouser 0 0
+</pre></code>
+
+<p>
+"Ctrl-X" -> type big "Y" to confirm exit and save. Then reboot:<br>
+</p>
+
+<pre><code>
+$ sudo reboot
+</pre></code>
+
+<p>
+After reboot type "ls" to list current directory:
+</p>
+
+<pre><code>
+$ ls
+</pre></code>
+
+<p>
+You will now see usbdrv. Type this to change directory to usbdrv:
+</p>
+
+<pre><code>
+$ cd usbdrv
+</pre></code>
+
+<p>
+Then type "ls" again to list files in usbdrv directory that is now hopefully the contents of your USB drive:
+</p>
+
+<pre><code>
+$ ls
+</pre></code>
+</p>
+
+<h2>6. Install omxplayer</h2>
+
+<p>
+First update apt-get (Advanced Packaging Tool - software management):
+</p>
+
+<pre><code>
+$ sudo apt-get update
+</pre></code>
+
+<p>
+Then install "Omxplayer":
+</p>
+
+<pre><code>
+$ sudo apt-get install omxplayer
+</pre></code>
+
+<p>
+This will install Omxplayer and all libraries Omxplayer is dependent on.<br>
+"Do you want to continue?"<br>
+Type big "Y"
+</p>
+
+<h2>7. Looping script</h2>
+
+<p>
+First go to the home directory on the pi:
+</p>
+
+<pre><code>
+$ cd /home/pi
+</pre></code>
+
+<p>
+Then create the looping script:
+</p>
+
+<pre><code>	
+$ sudo nano loopingVideo.sh
+</pre></code>
+
+<p>
+Then type this exactly like here:
+</p>
+
+<pre><code>	
+#!/bin/sh
+VIDEOPATH="/home/pi/usbdrv"
+SERVICE="omxplayer"
+while true; do
+	if ps ax | grep -v grep | grep $SERVICE > /dev/null
+	then
+	sleep 1;
+else
+	for entry in $VIDEOPATH/*
+	do
+		clear
+		omxplayer -o both $entry > /dev/null
+	done
+fi
+done
+</pre></code>
+
+<p>
+Omxplayer overruns hdmi/audio jack options in raspi-config (amixer). "-o both" in script directs audio to both.<br>
+"Ctrl-X" to save and exit<br>
+Type big "Y" to confirm
+</p>
+
+<p>
+Type "ls" to see the file:
+</p>
+
+<pre><code>
+$ ls
+</pre></code>
+
+<p>
+Then make the file executable (runable):
+</p>
+
+<pre><code>	
+$ sudo chmod +x loopingVideo.sh
+</pre></code>
+
+<p>
+Type "ls" again and see that the file has changed color to green:	
+</p>
+
+<pre><code>
+$ ls
+</pre></code>
+
+<br><br>
+
+<h2>8. Disable dhcp (internet)</h2>
+
+<p>
+This is not mandatory, but the boot will go faster as the pi will not spend time looking for internet connection that is not there:
+</p>
+
+<pre><code>
+$ sudo update-rc.d dhcpcd disable
+</pre></code>	
+
+<p>
+If you want to enable internet again, type:
+</p>
+
+<pre><code>
+$ sudo update-rc.d dhcpcd enable
+</pre></code>
+
+<br><br>
+
+<h2>9. Hide console and autorun script on startup boot</h2>
+
+<p>
+Using "/.bashrc" makes it possible to use the keyboard to exit script loop with "ctrl-c". ".bashrc" runs after the user is logged in. It also means that the script will start if you connect to the pi with ssh.
+</p>
+
+<pre><code>
+$ sudo nano /home/pi/.bashrc
+</pre></code>
+
+<p>
+Type this at the bottom of the text. The first line here makes sure the screen behind the video is black and is not showing console text. "0" means it turns the screen black after 0 minutes. "setterm -cursor off" turns off the blinking type cursor. And the last line runst the script.
+</p>
+
+<pre><code>
+setterm -blank 0
+setterm -cursor off
+/home/pi/loopingVideo.sh
+</pre></code>
+
+<br><br>
+
+<h2>10. Format your USB drive as FAT32</h2>
+
+<p>
+We had trouble getting this to work if the USB drive was formatted on Windows. It worked if we used macOS or Raspberry Pi to format.<br><br>
+
+<b>Here is how to do it on the pi:</b>
+To show the USB drive among all storage partitions and volumes on your computer use: 
+</p>
+
+<pre><code>
+$ lsblk
+</pre></code>
+
+<p>
+You can also use: 
+</p>
+
+<pre><code>
+$ df
+</pre></code>
+
+<p>
+or:
+</p>
+
+<pre><code>
+$ blkid
+</pre></code>
+
+<p>
+Suppose it may be /dev/sda1. Unmount it with: 
+</p>
+
+<pre><code>
+$ sudo umount /dev/sda1
+</pre></code>
+
+<p>
+To format drive with the FAT32 file system format: 
+</p>
+
+<pre><code>
+$ sudo mkfs.vfat /dev/sda1
+</pre></code>
+
+<p>
+ To set a file system label for your pen drive in the process: 
+</p>
+
+<pre><code>
+$ sudo mkfs.vfat -n 'name_for_your_pendrive' /dev/sda1
+</pre></code>
+
+<br><br>
+
+<h2>11. Use correct video codec</h2>
+	
+<p>
+- Copy your videofile to USB drive. Make sure the filename does not contain special characters or spaces.<br>
+- h264 codec works best. Apple Prores or Intermediate codec does not work.<br>
+- You can place multiple files on USB drive and they will play after each other<br>
+- You can also place audio wav files on the USB drive<br>
+</p>
+
+<h2>12. Boot up pi</h2>
+
+<p>
+- Insert USB drive before you give power to the pi. If you boot up the pi without USB drive connected, it will stop booting when trying to find USB drive. (/dev/sda1). Insert USB drive or the boot will fail.<br>
+- Connect pi to screen and power on screen<br>
+- The last thing to connect to pi is power<br>
+- The movie should automatically start playing after boot sequence with no console text showing.<br>
+- You can now use the pi with just hdmi, USB drive and power connected. If you want to abort the video and do something on the pi, just connect a keyboard and press "ctrl-c". If you want the type cursor back type "setterm -cursor on".
+</p>
+
+<br><br>
+
+<h2>Troubleshoot</h2>
+
+<p>
+Lightning icon on screen means it is getting too little power -> use power supply with higher ampere
+</p>
 
     </div>
     <div id="sidebar">
