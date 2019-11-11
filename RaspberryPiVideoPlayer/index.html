@@ -12,7 +12,7 @@
   <body>
     <div id="main">
       
-<h1>How to make auto starting looping video player with video files on USB drive</h1>
+<h1>How to make an auto starting and looping video player with video files on USB drive</h1>
 
 <br><br>
 
@@ -67,11 +67,11 @@ $ sudo nano /etc/fstab
 </pre></code>
 
 <p>
-Type this at the bottom. Make sure you type it exactly as here, or else the pi might not boot up and you will have to start over at point nr. 3:<br>
+Type this at the bottom. Make sure you type it exactly as here, or else the pi might not boot up and you will have to start over at point nr. 3. The USB drive will be read-only to minimize the risk of a dirty unmount.<br>
 </p>
 
 <pre><code>
-/dev/sda1 /home/pi/usbdrv vfat uid=pi,gid=pi,umask=0022,sync,auto,nosuid,rw,nouser 0 0
+/dev/sda1 /home/pi/usbdrv vfat uid=pi,gid=pi,umask=0022,sync,auto,nosuid,ro,nouser 0 0
 </pre></code>
 
 <p>
@@ -110,7 +110,7 @@ $ ls
 <h2>6. Install omxplayer</h2>
 
 <p>
-First update apt-get (Advanced Packaging Tool - software management):
+Make sure your pi is connected to the internet. Just connect an internet connected ethernet cable and reboot ("sudo reboot"). First update apt-get (Advanced Packaging Tool - software management):
 </p>
 
 <pre><code>
@@ -251,7 +251,7 @@ setterm -cursor off
 We had trouble getting this to work if the USB drive was formatted on Windows. It worked if we used macOS or Raspberry Pi to format.<br><br>
 
 <b>Here is how to do it on the pi:</b>
-To show the USB drive among all storage partitions and volumes on your computer use: 
+To show the USB drive among all storage partitions and volumes on your pi use: 
 </p>
 
 <pre><code>
@@ -291,7 +291,7 @@ $ sudo mkfs.vfat /dev/sda1
 </pre></code>
 
 <p>
- To set a file system label for your pen drive in the process: 
+ To set a label name for your drive: 
 </p>
 
 <pre><code>
