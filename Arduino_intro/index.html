@@ -53,17 +53,22 @@ void loop() {
 <h2>Fade LED</h2>
 <br>
 <div id="image">
-<a href="../images/Arduino_fade.png"><img src="../images/Arduino_fade.png" width="400"></a>
+<a href="../images/Arduino_LED_fade.png"><img src="../images/Arduino_LED_fade.png" width="400"></a>
 </div>
 <br>
+
+<p>
+- 220 ohm resistor
+</p>
+
 <pre><code>
-int ledPin = 9;        // the PWM pin the LED is attached to
+int ledPin = 11;        // the PWM pin the LED is attached to
 int brightness = 0;    // how bright the LED is
 int fadeAmount = 10;   // how many points to fade the LED by
 
 // the setup routine runs once when you press reset:
 void setup() {
-  // declare pin 9 to be an output:
+  // declare pin 11 to be an output:
   pinMode( ledPin, OUTPUT );
 
   Serial.begin(9600);
@@ -71,7 +76,7 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // set the brightness of pin 9:
+  // set the brightness of pin 11:
   analogWrite(ledPin, brightness);
 
   // change the brightness for next time through the loop:
@@ -92,7 +97,7 @@ void loop() {
 <h2>Potentiometer</h2>
 <br>
 <div id="image">
-<a href="../images/Arduino_potentiometer.jpg"><img src="../images/Arduino_potentiometer.jpg" width="400"></a>
+<a href="../images/Arduino_potentiometer_fritzing.png"><img src="../images/Arduino_potentiometer_fritzing.png" width="400"></a>
 </div>
 <br>
 <pre><code>
@@ -114,10 +119,19 @@ void loop() {
 
 <h2>Potentiometer controlling LED brightness</h2>
 <br>
+
+<div id="image">
+<a href="../images/Arduino_potentiometer_and_LED_fritzing.png"><img src="../images/Arduino_potentiometer_and_LED_fritzing.png" width="400"></a>
+</div>
+
+<p>
+- 220 ohm resistor for LED
+</p>
+
 <pre><code>
 int potPin = A2;    // select the ANALOG input pin for the potentiometer
 int val = 0;       // variable to store the value coming from the sensor
-int ledPin = 9;
+int ledPin = 11;
 int brightness = 255;
 
 void setup() {
@@ -138,8 +152,255 @@ void loop() {
 }
 </pre></code>
 
+<h2>Servo</h2>
+
+<div id="image">
+<a href="../images/Arduino_servo.jpg"><img src="../images/Arduino_servo.jpg" width="400"></a>
+</div>
+
+<div id="image">
+<a href="../images/Arduino_servo_and_potentiometer_fritzing.png"><img src="../images/Arduino_servo_and_potentiometer_fritzing.png" width="400"></a>
+</div>
+
+<p>
+</p>
+
+<pre><code>
+#include "Servo.h"
+
+Servo myservo;  // Create the servo object
+
+int potPin = A2; // Analog pin for pot-meter
+int potVal; // Variable to store value from pot-meter
+int servoPin = 11; // Pin to controll servo
+
+void setup() {
+  myservo.attach( servoPin );  // The servo is controlled with pin 11
+}
+
+void loop() {
+  potVal = analogRead( potPin ); // Read pot into pot variable
+  int scaledValue = map( potVal, 0, 1023, 0, 180 ); // Scale pot-value 0-1023 to servo angle value 0-180
+  myservo.write( scaledValue ); // Set the servo to its new position with the scaled value
+  delay( 15 ); // Waits for the servo to reach destination
+}
+</pre></code>
+
+<h2>Piezo speaker</h2>
+
+<div id="image">
+<a href="../images/Arduino_piezo_fritzing.png"><img src="../images/Arduino_piezo_fritzing.png" width="400"></a>
+</div>
+
+<p>
+- 1M ohm resistor
+</p>
+
+<pre><code>
+int piezoPin = 8;
+int freq = 44;
+int toneDuration = 500;
+
+void setup() {
+  
+}
+
+void loop() {
+
+    tone( piezoPin, freq, toneDuration );
+    
+    delay( 2000 );
+
+}
+</pre></code>
+
+<h2>Ultra Sonic and Piezo Speaker</h2>
+
+<div id="image">
+<a href="../images/Arduino_ultraSonic_and_piezo_fritzing.png"><img src="../images/Arduino_ultraSonic_and_piezo_fritzing.png" width="400"></a>
+</div>
+
+<div id="image">
+<a href="../images/Arduino_ultraSonic_and_piezo.jpg"><img src="../images/Arduino_ultraSonic_and_piezo.jpg" width="400"></a>
+</div>
+
+<pre><code>
+const unsigned int TRIG_PIN = 13;
+const unsigned int ECHO_PIN = 12;
+const unsigned int BAUD_RATE = 9600;
+const int piezoPin = 8;
+int freq = 440;
+
+void setup() {
+  pinMode( TRIG_PIN, OUTPUT );
+  pinMode( ECHO_PIN, INPUT );
+  Serial.begin( BAUD_RATE );
+}
+
+void loop() {
+  digitalWrite( TRIG_PIN, LOW );
+  delayMicroseconds( 2 );
+  digitalWrite( TRIG_PIN, HIGH) ;
+  delayMicroseconds( 10 );
+  digitalWrite( TRIG_PIN, LOW );
+  
+  const unsigned long duration = pulseIn( ECHO_PIN, HIGH );
+  int distance = duration/29/2;
+  
+  if( duration == 0 ){
+    Serial.println( "Warning: no pulse from sensor" );
+  } else {
+    Serial.println( distance );
+  }
+
+  freq = map( distance, 0, 3000, 44, 4400 );
+
+  tone( piezoPin, freq, 500 );
+ 
+  delay(100);
+  
+ }
+</pre></code>
+
+<h2>Photocell light sensor controls LED</h2>
+
+<div id="image">
+<a href="../images/Arduino_photocell_and_LED_photo.jpg"><img src="../images/Arduino_photocell_and_LED_photo.jpg" width="400"></a>
+</div>
+
+<div id="image">
+<a href="../images/Arduino_photocell_and_LED_fritzing.png"><img src="../images/Arduino_photocell_and_LED_fritzing.png" width="400"></a>
+</div>
+
+<p>
+- 220 ohm resistor for LED<br>
+- 1K ohm resistor for photocell light sensor
+</p>
+
+<pre><code>
+int photocellPin = 0;     // the cell and 10K pulldown are connected to a0
+int photocellReading;     // the analog reading from the sensor divider
+int LEDpin = 11;          // connect Red LED to pin 11 (PWM pin)
+int LEDbrightness;        // 
+void setup(void) {
+  // We'll send debugging information via the Serial monitor
+  Serial.begin(9600);   
+}
+ 
+void loop(void) {
+  photocellReading = analogRead(photocellPin);  
+ 
+  Serial.print("Analog reading = ");
+  Serial.println(photocellReading);     // the raw analog reading
+ 
+  // LED gets brighter the darker it is at the sensor
+  // that means we have to -invert- the reading from 0-1023 back to 1023-0
+  //photocellReading = 1023 - photocellReading;
+  //now we have to map 0-1023 to 0-255 since thats the range analogWrite uses
+  int clampedValue = constrain( photocellReading, 0, 100 );
+  
+  Serial.print("Clamped = ");
+  Serial.println(clampedValue); 
+  
+  LEDbrightness = map(clampedValue, 100, 0, 0, 255);
+  analogWrite(LEDpin, LEDbrightness);
+ 
+  delay(100);
+}
+</pre></code>
+
+<h2>PIR motion detection sensor</h2>
+
+<div id="image">
+<a href="../images/Arduino_PIR.gif"><img src="../images/Arduino_PIR.gif" width="400"></a>
+</div>
+
+<pre><code>
+  /*
+ * PIR sensor tester
+ */
+ 
+int ledPin = 13;                // choose the pin for the LED
+int inputPin = 2;               // choose the input pin (for PIR sensor)
+int pirState = LOW;             // we start, assuming no motion detected
+int val = 0;                    // variable for reading the pin status
+ 
+void setup() {
+  pinMode(ledPin, OUTPUT);      // declare LED as output
+  pinMode(inputPin, INPUT);     // declare sensor as input
+ 
+  Serial.begin(9600);
+}
+ 
+void loop(){
+  val = digitalRead(inputPin);  // read input value
+  if (val == HIGH) {            // check if the input is HIGH
+    digitalWrite(ledPin, HIGH);  // turn LED ON
+    if (pirState == LOW) {
+      // we have just turned on
+      Serial.println("Motion detected!");
+      // We only want to print on the output change, not state
+      pirState = HIGH;
+    }
+  } else {
+    digitalWrite(ledPin, LOW); // turn LED OFF
+    if (pirState == HIGH){
+      // we have just turned of
+      Serial.println("Motion ended!");
+      // We only want to print on the output change, not state
+      pirState = LOW;
+    }
+  }
+}
+</pre></code>
+
+<h2>Stepper motor 28BYJ-48</h2>
+
+<div id="image">
+<a href="../images/Arduino_Stepper_motor_28BYJ-48.jpg"><img src="../images/Arduino_Stepper_motor_28BYJ-48.jpg" width="400"></a>
+</div>
 
 
+<p>
+IN1 -> pin 3<br>
+IN2 -> pin 4<br>
+IN3 -> pin 5<br>
+IN4 -> pin 6<br><br>
+
++ -> 5V<br>
+- -> GND<br>
+</p>
+
+<pre><code>
+#include "AccelStepper.h"
+#define HALFSTEP 8
+
+// Motor pin definitions
+#define motorPin1  3     // IN1 on the ULN2003 driver 1
+#define motorPin2  4     // IN2 on the ULN2003 driver 1
+#define motorPin3  5     // IN3 on the ULN2003 driver 1
+#define motorPin4  6     // IN4 on the ULN2003 driver 1
+
+// Initialize with pin sequence IN1-IN3-IN2-IN4 for using the AccelStepper with 28BYJ-48
+AccelStepper stepper1(HALFSTEP, motorPin1, motorPin3, motorPin2, motorPin4);
+
+void setup() {
+  stepper1.setMaxSpeed(1000.0);
+  stepper1.setAcceleration(100.0);
+  stepper1.setSpeed(200);
+  stepper1.moveTo(20000);
+
+}//--(end setup )---
+
+void loop() {
+
+  //Change direction when the stepper reaches the target position
+  if (stepper1.distanceToGo() == 0) {
+    stepper1.moveTo(-stepper1.currentPosition());
+  }
+  stepper1.run();
+}
+</pre></code>
     </div>
     <div id="sidebar">
       

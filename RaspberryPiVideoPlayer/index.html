@@ -44,7 +44,8 @@ Only if you have norwegian keyboard:<br>
 <b>Localisation options</b> -> Change Keyboard Layout -> Generic 105-key PC -> Other -> Norwegian -> Norwegian (top) -> The default for the keyboard layout -> No compose key<br><br>
 <b>Boot Options</b> -> Desktop / CLI -> Console Autologin<br><br>
 <b>Interfacing Options</b> -> SSH -> enable -> YES<br><br>
-<b>Advanced Options</b> -> Memory Split -> type: 256 -> OK -> Reboot -> YES<br>
+<b>Advanced Options</b> -> Memory Split -> type: 256 -> OK -> Reboot -> YES<br><br>
+<b>Network Options</b> -> Wi-fi -> Enter your wi-fi SSID (name of wi-fi network) -> Enter your wi-fi password (if you don't have wi-fi, use an internet connected ethernet cable)<br>
 </p>
 
 <h2>5. Auto mount USB drive</h2>
@@ -109,7 +110,7 @@ $ ls
 <h2>6. Install omxplayer</h2>
 
 <p>
-Make sure your pi is connected to the internet. Just connect an internet connected ethernet cable and reboot ("sudo reboot"). First update apt-get (Advanced Packaging Tool - software management):
+Make sure your pi is connected to the internet. Just connect an internet connected ethernet cable if you don't have wi-fi and reboot ("sudo reboot"). First update apt-get (Advanced Packaging Tool - software management):
 </p>
 
 <pre><code>
@@ -157,7 +158,7 @@ Then type this exactly like here:
 VIDEOPATH="/home/pi/usbdrv"
 SERVICE="omxplayer"
 while true; do
-	if ps ax | grep -v grep | grep $SERVICE > /dev/null
+if ps ax | grep -v grep | grep $SERVICE > /dev/null
 	then
 	sleep 1;
 else
