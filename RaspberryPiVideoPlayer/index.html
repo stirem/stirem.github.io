@@ -16,16 +16,16 @@
 <br><br>
 
 <h2>1. Format SD card</h2>
-<p>Software: “<a href="https://www.sdcard.org/downloads/formatter/">SD Formatter</a>”</p>
+<p>From Mac or PC download software: “<a href="https://www.sdcard.org/downloads/formatter/">SD Formatter</a>” and format the SD card.</p>
 
 <h2>2. Download image</h2>
-<p><a href="https://www.raspberrypi.org/downloads/raspbian/">Raspbian lite</a></p>
+<p>From Mac or PC download: <a href="https://www.raspberrypi.org/downloads/raspbian/">Raspbian lite</a></p>
 
 
 <h2>3. Flash SD card with "Raspbian lite" image</h2>
 
 <p>
-Use software: “<a href="https://www.balena.io/etcher/">Balena Etcher</a>” to flash SD card.
+On Mac or PC use software: “<a href="https://www.balena.io/etcher/">Balena Etcher</a>” to flash SD card with Raspbian lite image.
 </p>
 
 <h2>4. Boot up Raspberry Pi</h2>
@@ -44,14 +44,14 @@ Only if you have norwegian keyboard:<br>
 <b>Localisation options</b> -> Change Keyboard Layout -> Generic 105-key PC -> Other -> Norwegian -> Norwegian (top) -> The default for the keyboard layout -> No compose key<br><br>
 <b>Boot Options</b> -> Desktop / CLI -> Console Autologin<br><br>
 <b>Interfacing Options</b> -> SSH -> enable -> YES<br><br>
-<b>Advanced Options</b> -> Memory Split -> type: 256 -> OK -> Reboot -> YES<br><br>
+<b>Advanced Options</b> -> Memory Split -> Replace with: 256 -> OK<br><br>
 <b>Network Options</b> -> Wi-fi -> Enter your wi-fi SSID (name of wi-fi network) -> Enter your wi-fi password (if you don't have wi-fi, use an internet connected ethernet cable)<br>
 </p>
 
 <h2>5. Auto mount USB drive</h2>
 
 <p>	
-Insert USB drive then type:
+You may now copy a videofile to the USB drive (see point 10 for info about codec) and then insert USB drive and type:
 </p>
 
 <pre><code>
@@ -75,7 +75,7 @@ Type this at the bottom. Make sure you type it exactly as here, or else the pi m
 </pre></code>
 
 <p>
-"Ctrl-X" -> type big "Y" to confirm exit and save. Then reboot:<br>
+"Ctrl-X" -> type big "Y" and press ENTER to confirm exit and save. Then reboot:<br>
 </p>
 
 <pre><code>
@@ -128,7 +128,7 @@ $ sudo apt-get install omxplayer
 <p>
 This will install Omxplayer and all libraries Omxplayer is dependent on.<br>
 "Do you want to continue?"<br>
-Type big "Y"
+Type big "Y" and press ENTER
 </p>
 
 <h2>7. Looping script</h2>
@@ -174,7 +174,7 @@ done
 <p>
 Omxplayer overruns hdmi/audio jack options in raspi-config (amixer). "-o both" in script directs audio to both.<br>
 "Ctrl-X" to save and exit<br>
-Type big "Y" to confirm
+Type big "Y" and press ENTER to confirm
 </p>
 
 <p>
@@ -245,7 +245,35 @@ setterm -cursor off
 
 <br><br>
 
-<h2>10. Format your USB drive as FAT32</h2>
+
+<h2>10. Use correct video codec</h2>
+	
+<p>
+- Copy your videofile to USB drive. Make sure the filename does not contain special characters or spaces.<br>
+- h264 codec works best. Apple Prores or Intermediate codec does not work.<br>
+- You can place multiple files on USB drive and they will play after each other<br>
+- You can also place audio wav files on the USB drive<br>
+</p>
+
+<h2>11. Boot up pi</h2>
+
+<p>
+- Insert USB drive before you give power to the pi. If you boot up the pi without USB drive connected, it will stop booting when trying to find USB drive. (/dev/sda1). Insert USB drive or the boot will fail.<br>
+- Connect pi to screen and power on screen<br>
+- The last thing to connect to pi is power<br>
+- The movie should automatically start playing after boot sequence with no console text showing.<br>
+- You can now use the pi with just hdmi, USB drive and power connected. If you want to abort the video and do something on the pi, just connect a keyboard and press "ctrl-c". If you want the type cursor back type "setterm -cursor on".
+</p>
+
+<br><br>
+
+<h2>Troubleshoot</h2>
+
+<p>
+Lightning icon on screen means it is getting too little power -> use power supply with higher ampere
+</p>
+
+<h3>Issues when formatting on Windows</h3>
 
 <p>
 We had trouble getting this to work if the USB drive was formatted on Windows. It worked if we used macOS or Raspberry Pi to format.<br><br>
@@ -299,33 +327,6 @@ $ sudo mkfs.vfat -n 'name_for_your_pendrive' /dev/sda1
 </pre></code>
 
 <br><br>
-
-<h2>11. Use correct video codec</h2>
-	
-<p>
-- Copy your videofile to USB drive. Make sure the filename does not contain special characters or spaces.<br>
-- h264 codec works best. Apple Prores or Intermediate codec does not work.<br>
-- You can place multiple files on USB drive and they will play after each other<br>
-- You can also place audio wav files on the USB drive<br>
-</p>
-
-<h2>12. Boot up pi</h2>
-
-<p>
-- Insert USB drive before you give power to the pi. If you boot up the pi without USB drive connected, it will stop booting when trying to find USB drive. (/dev/sda1). Insert USB drive or the boot will fail.<br>
-- Connect pi to screen and power on screen<br>
-- The last thing to connect to pi is power<br>
-- The movie should automatically start playing after boot sequence with no console text showing.<br>
-- You can now use the pi with just hdmi, USB drive and power connected. If you want to abort the video and do something on the pi, just connect a keyboard and press "ctrl-c". If you want the type cursor back type "setterm -cursor on".
-</p>
-
-<br><br>
-
-<h2>Troubleshoot</h2>
-
-<p>
-Lightning icon on screen means it is getting too little power -> use power supply with higher ampere
-</p>
 
     </div>
     <div id="sidebar">
