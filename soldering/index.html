@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Verkt&oslash;ykassen - Soldering</title>
+    <link rel="stylesheet" href="/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700" rel="stylesheet">
+
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="Nanoc 4.11.14">
+  </head>
+  <body>
+    <div id="main">
+      <h1>Soldering</h1>
+
+
+<p>
+- Use around 400-450 degrees celsius.<br>
+- Give heat to the wire or pin AND the hole.
+</p>
+
+
+<h2>Potentiometer controlling LED brightness Arduino code</h2>
+
+<pre><code>
+int potPin = A2;    // select the ANALOG input pin for the potentiometer
+int val = 0;       // variable to store the value coming from the sensor
+int ledPin = 11;
+int brightness = 255;
+
+void setup() {
+  Serial.begin( 9600 ); // Start Serial
+  pinMode( potPin, INPUT );  // declare the ledPin as an OUTPUT
+  pinMode( ledPin, OUTPUT );
+}
+
+void loop() {
+  val = analogRead( potPin );    // read the value from the sensor
+  Serial.print( "Potentiometer: " );
+  Serial.println( val ); // Write to Serial
+
+  brightness = map( val, 0, 1023, 0, 255 ); // Scale analog potentiometer values to LED values
+  Serial.print( "Brightness: " );
+  Serial.println( brightness );
+  analogWrite( ledPin, brightness );
+}
+</pre></code>
+
+<h2>Links to equipment</h2>
+
+<a href="https://www.adafruit.com/product/196">Proto-Screwshield (Wingshield)</a><br><br>
+<a href="https://www.kjell.com/no/produkter/elektro-og-verktoy/arduino/tilbehor/kabinett-i-metall-for-arduino-prosjekter-rustfri-p88024">Cabinet in metal</a><br><br>
+<a href="https://www.kjell.com/no/produkter/elektro-og-verktoy/batterier/batteriholdere/luxorparts-batteriholder-4x-aa-for-arduino-p90751">Battery cabinet 4 x AA</a><br><br>
+<a href="https://www.kjell.com/no/produkter/elektro-og-verktoy/batterier/batteriholdere/luxorparts-batterikabel-for-arduino-p90652">Battery cable for 9V battery</a><br><br>
+<a href="https://www.kjell.com/no/produkter/elektro-og-verktoy/arduino/shields/luxorparts-protoshield-for-uno-r3-p87944">Proto shield</a><br><br>
+<a href="https://www.kjell.com/no/produkter/elektro-og-verktoy/arduino/shields/luxorparts-skruepabygg-for-arduino-p87890">Screw terminals for Arduino</a><br><br>
+<a href="https://www.kjell.com/no/produkter/elektro-og-verktoy/elektronikk/montering/luxorparts-skruterminal-5-mm-2-polet-10-pk.-p90760">Screw terminal</a><br><br>
+    </div>
+    <div id="sidebar">
+      
+      <h2><a href="/">Home</a></h2>
+
+      <h2><a href="/soldering">Soldering</a></h2>
+
+      <h2><a href="/VideoMapping_MadMapper">Video mapping with MadMapper</a></h2>
+
+      <h2><a href="/RaspberryPiVideoPlayer">Raspberry Pi Video Player </a></h2>
+
+      <h2><a href="/Arduino_intro">Arduino</a></h2>
+
+      <h2><a href="/CreativeSoftware_Overview">Creative Software Overview</a></h2>
+
+      <h2><a href="/LED_strip_and_diodes">LED Strips and Diodes</a></h2>
+
+      <h2><a href="/VideoSync_Brightsign">Video Syncronization with BrightSign</a></h2>
+
+      <h2><a href="/unity">Unity</a></h2>
+
+      <h2><a href="/microbit">micro:bit</a></h2>
+
+
+    </div>
+  </body>
+</html>
