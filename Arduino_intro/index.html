@@ -102,11 +102,11 @@ void loop() {
 <br>
 <pre><code>
 int potPin = A2;    // select the ANALOG input pin for the potentiometer
-int value = 0;       // variable to store the value coming from the sensor
+int value = 0;       // variable to store the value coming from the pot
 
 void setup() {
   Serial.begin( 9600 ); // Start Serial
-  pinMode( potPin, INPUT );  // declare the ledPin as an OUTPUT
+  pinMode( potPin, INPUT );  // declare the potPin as an INPUT
 }
 
 void loop() {
@@ -405,6 +405,8 @@ void loop() {
     <div id="sidebar">
       
       <h2><a href="/">Home</a></h2>
+
+      <h2><a href="/Max">Max</a></h2>
 
       <h2><a href="/soldering">Soldering</a></h2>
 
